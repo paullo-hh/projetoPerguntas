@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 main() => runApp(const PerguntaApp());
 
+
 class _PerguntaAppState extends State<PerguntaApp> {
   var _perguntaSelecionada = 0;
   final List<Map<String, Object>> _perguntas = const [
