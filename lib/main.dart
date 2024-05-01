@@ -1,49 +1,77 @@
-// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
-
 import 'package:flutter/material.dart';
+import './questao.dart';
+import './resposta.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-main() => runApp(PerguntaApp());
+main() => runApp(const PerguntaApp());
 
-class PerguntaApp extends StatelessWidget {
+class _PerguntaAppState extends State<PerguntaApp> {
+  var _perguntaSelecionada = 0;
+  final List<Map<String, Object>> _perguntas = const [
+    {
+      'texto': 'Qual a sua cor favorita?',
+      'respostas': ['Preto', 'Vermelho', 'Verde', 'Branco', 'Roxo'],
+    },
+    {
+      'texto': 'Qual o seu animal favorito?',
+      'respostas': ['Coelho', 'Cobra', 'Elefante', 'Leão'],
+    },
+  ];
 
-	var perguntaSelecionada = 0;
+  void _responder() {
+    if (temPerguntaSelecionada) {
+      setState(() {
+        _perguntaSelecionada++;
+      });
+      print(_perguntaSelecionada);
+    }
+  }
 
-	void responder() {
-		perguntaSelecionada++;
-		print(perguntaSelecionada);
-	}
+  bool get temPerguntaSelecionada {
+    return _perguntaSelecionada < _perguntas.length;
+  }
 
-	@override
-	Widget build(BuildContext context) {
-		final perguntas = [
-		'Qual a sua cor favorita?',
-		'Qual o seu animal favorito?',
-		];
+  @override
+  Widget build(BuildContext context) {
+    List<String> respostas = temPerguntaSelecionada
+        ? _perguntas[_perguntaSelecionada].cast()['respostas']
+        : [];
 
-	return MaterialApp(
-		home: Scaffold(
-			appBar: AppBar(
-				title: Text('Perguntas'),
-				backgroundColor: Color.fromRGBO(0, 0, 0, 0.5),
-				),
-				body: Column(
-				  children: <Widget>[
-				    Text(perguntas[perguntaSelecionada]),
-					ElevatedButton(
-						child: Text('RESPOSTA 1'),
-						onPressed: responder,
-					),
-					ElevatedButton(
-						child: Text('RESPOSTA 2'),
-						onPressed: responder,
-					),
-					ElevatedButton(
-						child: Text('RESPOSTA 3'),
-						onPressed: responder,
-					),
-				  ],
-				),
-			),
-	);
-	}
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Perguntas'),
+          backgroundColor: const Color.fromARGB(255, 99, 178, 243),
+        ),
+        body: temPerguntaSelecionada
+            ? Column(
+                children: <Widget>[
+                  Questao(_perguntas[_perguntaSelecionada]['texto'] as String),
+                  ...respostas.map((t) => Resposta(t, _responder)).toList(),
+                ],
+              )
+            : Center(
+                child: Text(
+                  'Congratulations!',
+                  style: GoogleFonts.poppins(
+                    textStyle: Theme.of(context).textTheme.displayLarge,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w500,
+                    fontStyle: FontStyle.normal,
+                  ),
+                ),
+              ),
+      ),
+    );
+  }
+}
+
+class PerguntaApp extends StatefulWidget {
+  const PerguntaApp({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _PerguntaAppState createState() {
+    return _PerguntaAppState();
+  }
 }
