@@ -1,22 +1,32 @@
 import 'package:flutter/material.dart';
-import './questao.dart';
-import './resposta.dart';
-import 'package:google_fonts/google_fonts.dart';
+import './resultado.dart';
+import './questionario.dart';
 
 main() => runApp(const PerguntaApp());
-
 
 class _PerguntaAppState extends State<PerguntaApp> {
   var _perguntaSelecionada = 0;
   final List<Map<String, Object>> _perguntas = const [
     {
       'texto': 'Qual a sua cor favorita?',
-      'respostas': ['Preto', 'Vermelho', 'Verde', 'Branco', 'Roxo'],
+      'respostas': [
+        {'texto': 'Preto', 'nota': 3},
+        {'texto': 'Vermelho', 'nota': 5},
+        {'texto': 'Verde', 'nota': 10}, // 30
+        {'texto': 'Branco', 'nota': 5},
+        {'texto': 'Roxo', 'nota': 7}
+      ],
     },
     {
       'texto': 'Qual o seu animal favorito?',
-      'respostas': ['Coelho', 'Cobra', 'Elefante', 'Leão'],
-    },
+      'respostas': [
+		{'texto': 'Coelho', 'nota': 3}, 
+		{'texto': 'Cobra', 'nota': 5}, 
+		{'texto': 'Gato', 'nota': 10}, // 30
+		{'texto': 'Cachorro', 'nota': 5}, 
+		{'texto': 'Camelo', 'nota': 7}
+		],
+    }
   ];
 
   void _responder() {
@@ -24,46 +34,26 @@ class _PerguntaAppState extends State<PerguntaApp> {
       setState(() {
         _perguntaSelecionada++;
       });
-      print(_perguntaSelecionada);
     }
   }
 
-  bool get temPerguntaSelecionada {
+    bool get temPerguntaSelecionada {
     return _perguntaSelecionada < _perguntas.length;
   }
 
   @override
   Widget build(BuildContext context) {
-    List<String> respostas = temPerguntaSelecionada
-        ? _perguntas[_perguntaSelecionada].cast()['respostas']
-        : [];
-
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Perguntas'),
-          backgroundColor: const Color.fromARGB(255, 99, 178, 243),
-        ),
-        body: temPerguntaSelecionada
-            ? Column(
-                children: <Widget>[
-                  Questao(_perguntas[_perguntaSelecionada]['texto'] as String),
-                  ...respostas.map((t) => Resposta(t, _responder)).toList(),
-                ],
-              )
-            : Center(
-                child: Text(
-                  'Congratulations!',
-                  style: GoogleFonts.poppins(
-                    textStyle: Theme.of(context).textTheme.displayLarge,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w500,
-                    fontStyle: FontStyle.normal,
-                  ),
-                ),
-              ),
-      ),
-    );
+        home: Scaffold(
+            appBar: AppBar(
+                title: const Text('Perguntas'),
+                backgroundColor: const Color.fromARGB(255, 99, 178, 243)),
+            body: temPerguntaSelecionada
+                ? Questionario(
+                    perguntas: _perguntas,
+                    perguntaSelecionada: _perguntaSelecionada,
+                    quandoResponder: _responder)
+                : Resultado()));
   }
 }
 
