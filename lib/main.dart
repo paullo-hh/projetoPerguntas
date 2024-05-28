@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-// ignore: unused_import
-import 'package:dart_format/dart_format.dart';
 import './resultado.dart';
 import './questionario.dart';
 /* import 'dart:ui'; */
